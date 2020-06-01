@@ -18,13 +18,18 @@ togglePSU()
 v = float(input('what voltage? : '))
 setVoltageSetpoint(v)
 time.sleep(0.2)
-print(getVoltageReal())
+print('voltage: ' + str(getVoltageReal()))
+setVoltageOverProtect(10)
 
 
 i = float(input('what current? : '))
 setCurrentSetpoint(i)
 time.sleep(0.2)
-print(getCurrentReal())
+print('current: ' + str(getCurrentReal()))
+
+time.sleep(2)
+
+print('power: ' + str(getPowerReal()))
 
 
 togglePSU()

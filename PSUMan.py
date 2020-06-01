@@ -64,6 +64,14 @@ def getVoltageSetpoint():
     else:
         return(float(a.registers[0]/100))
 
+def setVoltageOverProtect(v):
+    if(v < 0 or v > 32):
+        print('voltage protection out of range')
+    else:
+        v = int(v*100.0)
+        a = client.write_register(REG_VPROTECT, v, unit=UNIT)
+        if(a.isError()):
+            print(a)
 
 
     
@@ -93,15 +101,11 @@ def getCurrentSetpoint():
 
 
 def togglePSU():
-    a = client.read_holding_registers(REG_ONOFF, 1, unit=UNIT)
-    if(a.isError()):
-        print('unable to read PSU status')
+    a = getPSUStatus()
+    if(a):
+        setPSUStatus(False)
     else:
-        stat = a.registers[0]
-        stat = 1-stat #invert the value
-        a = client.write_register(REG_ONOFF, stat, unit=UNIT)
-        if(a.isError()):
-            print('was able to read PSU status but not write it')
+        setPSUStatus(True)
 
 def getPSUStatus():
     a = client.read_holding_registers(REG_ONOFF, 1, unit=UNIT)
@@ -121,3 +125,14 @@ def setPSUStatus(stat):
     a = client.write_register(REG_ONOFF, stat, unit=UNIT)
     if(a.isError()):
         print('unable to write PSU status')
+
+
+
+def getPowerReal():
+    a = client.read_holding_registers(REG_PGETH, 1, unit=UNIT)
+    b = client.read_holding_registers(REG_PGETL, 1, unit=UNIT)
+    if(a.isError()==0 and b.isError()==0):
+        return((a.registers[0]*65535 + b.registers[0])/1000)
+    else:
+        print('unable to read power')
+
