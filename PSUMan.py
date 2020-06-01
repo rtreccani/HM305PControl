@@ -1,6 +1,22 @@
 from pymodbus.client.sync import ModbusSerialClient
 import signal, sys, time
-from PSUManDefs import *
+
+REG_ONOFF = 1
+REG_FLAGS = 2
+REG_SPECTYPE = 3
+REG_TAIL = 4
+REG_DEC_CAPACITY= 5
+REG_VGET = 16
+REG_IGET = 17
+REG_PGETH = 18
+REG_PGETL = 19
+REG_VSET = 48
+REG_ISET = 49
+REG_VPROTECT = 36
+REG_IPROTECT = 37
+REG_PPROTECT = 38
+REG_VIRTUALBUSID = 39321 #why 
+
 
 UNIT=0x01
 
