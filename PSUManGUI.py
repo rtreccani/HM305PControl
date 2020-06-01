@@ -1,8 +1,9 @@
 from PSUMan import *
 from PyQt5.QtWidgets import QAction, QApplication, QLabel, QWidget, QPushButton,QHBoxLayout, QVBoxLayout, QLineEdit
-from PyQt5.QtGui import QDoubleValidator
+from PyQt5.QtGui import QDoubleValidator, QPalette, QColor, QColorConstants
 from PyQt5.QtCore import QTimer
 import time
+from pyqt_led import Led
 
 
 
@@ -17,7 +18,6 @@ vertStack = QVBoxLayout()
 # Create pushbutton to toggle PSU -----------------------------------
 PSUToggleButton = QPushButton('toggle PSU')
 PSUToggleButton.clicked.connect(togglePSU)
-
 vertStack.addWidget(PSUToggleButton)
 #end ------------------------------------------------------------
 
@@ -40,13 +40,7 @@ voltageBox.addWidget(voltageInput)
 voltageBox.addWidget(QLabel('volts'))
 vertStack.addLayout(voltageBox)
 
-def updateLiveVoltage():
-    liveVoltageReadout.setText(str(getVoltageReal()))
-
 liveVoltageReadout = QLabel('live voltage')
-voltageTimer = QTimer()
-voltageTimer.timeout.connect(updateLiveVoltage)
-voltageTimer.start(200)
 voltageBox.addWidget(liveVoltageReadout)
 #end -----------------------------------------------------------------
 
@@ -66,27 +60,49 @@ currentBox = QHBoxLayout()
 currentBox.addWidget(QLabel('enter a new current limit'))
 currentBox.addWidget(currentInput)
 currentBox.addWidget(QLabel('amps'))
+CCLed = Led(None, Led.red, Led.black, Led.circle)
+CCLed.set_status(False)
+currentBox.addWidget(CCLed)
 vertStack.addLayout(currentBox)
 
-def updateLiveCurrent():
-    liveCurrentReadout.setText(str(getCurrentReal()))
-
 liveCurrentReadout = QLabel('live current')
-currentTimer = QTimer()
-currentTimer.timeout.connect(updateLiveCurrent)
-currentTimer.start(200)
 currentBox.addWidget(liveCurrentReadout)
 #end -----------------------------------------------------------------
 
+def updateAllReadings():
+    stat = getPSUStatus()
+    liveVoltage = getVoltageReal()
+    liveCurrent = getCurrentReal()
+    voltageSetpoint = getVoltageSetpoint()
+    currentSetpoint = getCurrentSetpoint()
+
+    if(not voltageInput.hasFocus()):
+        voltageInput.setText(str(voltageSetpoint))
+
+    if(not currentInput.hasFocus()):
+        currentInput.setText(str(currentSetpoint))
+
+    if(stat==True):
+        PSUToggleButton.setStyleSheet("background-color:rgb(11,231, 13)")
+    else:
+        PSUToggleButton.setStyleSheet("")
+
+    liveVoltageReadout.setText(str(liveVoltage))
+    liveCurrentReadout.setText(str(liveCurrent))
+    if(stat and abs(liveVoltage - voltageSetpoint)>0.1 or abs(liveCurrent-currentSetpoint)<0.1):
+        CCLed.set_status(True)
+    else:
+        CCLed.set_status(False)
+
+
+readingsTimer = QTimer()
+readingsTimer.timeout.connect(updateAllReadings)
+readingsTimer.start(200)
 
 
 
 
-
-
-
-
-
+window.setWindowTitle('HM305P control by Timecop97')
 window.setLayout(vertStack)
 window.show()
 PSUConnect()

@@ -17,6 +17,15 @@ REG_IPROTECT = 37
 REG_PPROTECT = 38
 REG_VIRTUALBUSID = 39321 #why 
 
+class flags:
+    OVP = False
+    OCP = False
+    OPP = False
+    OTP = False
+    SCP = False
+
+
+
 UNIT=0x01
 
 client = ModbusSerialClient(method = 'rtu', port='COM9', timeout=2, baudrate=9600)
@@ -102,3 +111,20 @@ def getPowerReal():
     powerL = client.read_holding_registers(REG_PGETL, 1, unit=UNIT)
     assert((not powerH.isError()) and (not powerL.isError())), 'unable to read power level'
     return((a.registers[0]*65535 + b.registers[0])/1000) #merge the two together
+
+
+
+
+def getFlags():
+    stat = client.read_holding_registers(REG_FLAGS, 1, unit=UNIT)
+    assert(not stat.isError()), 'unable to get flags'
+    value = stat.registers[0]
+    print(value)
+    retFlags = flags()
+    return(retFlags)
+
+def getTail():
+    stat = client.read_holding_registers(REG_FLAGS, 1, unit=UNIT)
+    assert(not stat.isError()), 'unable to get flags'
+    value = stat.registers[0]
+    print(value)
