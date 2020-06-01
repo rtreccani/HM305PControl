@@ -25,7 +25,7 @@ def PSUDisconnect():
 
 
 
-def setVoltage(v):
+def setVoltageSetpoint(v):
     if(v<0.0 or v > 32.0):
         print('voltage out of range')
     else:
@@ -34,7 +34,7 @@ def setVoltage(v):
         if(a.isError()):
             print(a)
 
-def getVoltage():
+def getVoltageReal():
     a = client.read_holding_registers(REG_VGET, 1, unit=UNIT)
     if(a.isError()):
         print('unable to read voltage')
@@ -51,7 +51,7 @@ def getVoltageSetpoint():
 
 
     
-def setCurrent(i):
+def setCurrentSetpoint(i):
     if(i<0.0 or i > 5.000):
         print('current out of range')
     else:
@@ -60,7 +60,7 @@ def setCurrent(i):
         if(a.isError()):
             print(a)
 
-def getCurrent():
+def getCurrentReal():
     a = client.read_holding_registers(REG_IGET, 1, unit=UNIT)
     if(a.isError()==0):
         return(float(a.registers[0]/1000))
