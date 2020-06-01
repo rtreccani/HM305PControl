@@ -33,7 +33,7 @@ def PSUDisconnect():
 
 
 def setVoltageSetpoint(v):
-    assert(v>0.0 and v < 32.0), 'voltage setpoint request out of range'
+    assert(v>=0.0 and v <= 32.0), 'voltage setpoint request out of range'
     v = int(v*100.0)
     stat = client.write_register(REG_VSET, v, unit=UNIT)
     assert(not stat.isError()), 'unable to set voltage setpoint'
@@ -49,7 +49,7 @@ def getVoltageSetpoint():
     return(float(stat.registers[0]/100))
 
 def setVoltageOverProtect(v):
-    assert(v > 0.0 and v < 32.0), 'voltage overprotect value not in range'
+    assert(v >= 0.0 and v <= 32.0), 'voltage overprotect value not in range'
     v = int(v*100.0)
     stat = client.write_register(REG_VPROTECT, v, unit=UNIT)
     assert(not stat.isError()), 'unable to set voltage over-protect'
@@ -57,7 +57,7 @@ def setVoltageOverProtect(v):
 
 
 def setCurrentSetpoint(i):
-    assert(i>0.0 and i < 5.0),'current out of range'
+    assert(i>=0.0 and i <= 5.0),'current out of range'
     i = int(i*1000.0)
     stat = client.write_register(REG_ISET, i, unit=UNIT)
     assert(not stat.isError()), 'unable to set current setpoint'
