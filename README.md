@@ -14,7 +14,8 @@ Luckily there's already a python module known as pymodbus that contains all you 
 * set and get the master power switch status, as well as toggle
 * set and get the voltage setpoint, and get the real voltage
 * set and get the current setpoint, and get the real current
+
 Currently the UI looks like this 
 ![screencap of slightly less ugly software](https://media.discordapp.net/attachments/399691384652562434/787681840826810408/unknown.png)
-
+I'd love to make it more visually appealing, but my QT knowledge is minimal. I'm working on adding a graph of voltage and current.
 Watch this space if you have this PSU
