@@ -6,9 +6,7 @@ Here's a screencap from the original software
 
 ![screencap of ugly software](https://cdn.discordapp.com/attachments/399691384652562434/716690129799872582/unknown.png)
 
-Holy UI design batman! and to boot, it didn't actually work. No matter how many times and different configurations I tried, I couldn't connect to it. It kept telling me "It is detected that the device is not have electric, the device cannot sample the data, please open the power and then excute(sic) the operation"
-
-Holy useless error message batman!
+This graphic design is unimpressive to say the least, and to boot, it didn't actually work. No matter how many times and different configurations I tried, I couldn't connect to it. It kept telling me "It is detected that the device is not have electric, the device cannot sample the data, please open the power and then excute the operation"
 
 So I did some digging and discovered it uses a standard known as Modbus RTU over serial. The connection chugs along at 9600 baud. 
 
@@ -18,4 +16,3 @@ Luckily there's already a python module known as pymodbus that contains all you 
 * set and get the current setpoint, and get the real current
 
 Watch this space if you have this PSU
-Timecop over and out!
