@@ -105,7 +105,7 @@ readingsTimer.start(200)
 window.setWindowTitle('HM305P control by Timecop97')
 window.setLayout(vertStack)
 window.show()
-PSUConnect()
+PSUAutoconnect()
 app.exec_()
 
 

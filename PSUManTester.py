@@ -9,7 +9,7 @@ def ctrlc_handler(sig, frame):
     sys.exit(0)
 
 
-PSUConnect()
+PSUAutoconnect()
 
 
 togglePSU()

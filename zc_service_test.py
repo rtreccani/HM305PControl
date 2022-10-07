@@ -19,8 +19,9 @@ def rxMSock(sock, nodeId, serviceId):
         elif msg == None:
             print(f"connection closed remotely: {nodeId}")
             sock.close()
+            return
 
-PSUConnect()
+PSUAutoconnect()
 
 zc.advertise(rxMSock, SERVICE_ID)
 

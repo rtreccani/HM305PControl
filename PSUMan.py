@@ -1,5 +1,6 @@
 from pymodbus.client.sync import ModbusSerialClient
 import signal, sys, time
+import serial.tools.list_ports
 
 REG_ONOFF = 1
 REG_FLAGS = 2
@@ -28,8 +29,23 @@ class flags:
 
 UNIT=0x01
 
-client = ModbusSerialClient(method = 'rtu', port='COM4', timeout=2, baudrate=9600) #TODO Auto-find port
+client = ModbusSerialClient(method = 'rtu', port='COM9', timeout=2, baudrate=9600)
 
+def PSUAutoconnect():
+    PSUDisconnect()
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        client.port = port.device
+        connStat = client.connect()
+        if connStat:
+            try:
+                getVoltageReal()
+                print(f"connected to {port.device}")
+                return
+            except:
+                pass
+        client.close()
+    assert(False == True) , 'Couldn\'t connect to PSU' 
 
 def PSUConnect():
     connStat = client.connect()
