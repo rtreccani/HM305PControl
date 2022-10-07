@@ -106,6 +106,9 @@ def togglePSU():
     else:
         setPSUStatus(True)
 
+def getPSUConnected():
+    return client.is_socket_open() # Doesn't distinguish from a connected, incorrect com port, but should work in MOST circumstances.
+
 def getPSUStatus():
     stat = client.read_holding_registers(REG_ONOFF, 1, unit=UNIT)
     assert(not stat.isError()), 'unable to get PSU status'
@@ -141,6 +144,7 @@ def getFlags():
 
 def getTail():
     stat = client.read_holding_registers(REG_FLAGS, 1, unit=UNIT)
-    assert(not stat.isError()), 'unable to get flags'
+    assert(not stat.isError()), 'unable to get tail'
     value = stat.registers[0]
     print(value)
+    return(value)
