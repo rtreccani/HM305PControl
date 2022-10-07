@@ -28,7 +28,7 @@ class flags:
 
 UNIT=0x01
 
-client = ModbusSerialClient(method = 'rtu', port='COM9', timeout=2, baudrate=9600)
+client = ModbusSerialClient(method = 'rtu', port='COM4', timeout=2, baudrate=9600) #TODO Auto-find port
 
 
 def PSUConnect():
