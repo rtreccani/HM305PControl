@@ -39,7 +39,7 @@ def PSUAutoconnect():
         connStat = client.connect()
         if connStat:
             try:
-                getVoltageReal()
+                getVoltageReal() # A check to see if we're actually connected to a PSU
                 print(f"connected to {port.device}")
                 return
             except:
@@ -123,6 +123,20 @@ def setPSUStatus(stat):
     stat = client.write_register(REG_ONOFF, stat, unit=UNIT)
     assert(not stat.isError()), 'unable to set PSU status'
 
+def getPSUData():
+    stat = client.read_holding_registers(0, 50, unit=UNIT)
+    assert(not stat.isError()), 'unable to get PSU status'
+    stat = stat.registers
+    state = stat[REG_ONOFF]
+    liveVoltage = stat[REG_VGET]
+    liveCurrent = stat[REG_IGET]
+    voltageSetpoint = stat[REG_VSET]
+    currentSetpoint = stat[REG_ISET]
+    return (state, liveVoltage, liveCurrent, voltageSetpoint, currentSetpoint)
+    
+
+
+
 
 
 def getPowerReal():
@@ -143,7 +157,7 @@ def getFlags():
     return(retFlags)
 
 def getTail():
-    stat = client.read_holding_registers(REG_FLAGS, 1, unit=UNIT)
+    stat = client.read_holding_registers(REG_TAIL, 1, unit=UNIT)
     assert(not stat.isError()), 'unable to get tail'
     value = stat.registers[0]
     print(value)

@@ -2,7 +2,7 @@ import threading
 
 from zeroconnect import ZeroConnect, Ad
 from PSUMan import *
-from time import sleep
+import time
 
 SERVICE_ID = "0f50032d-cc47-407c-9f1a-a3a28a680c1e"
 
@@ -26,18 +26,29 @@ def rxMSock(sock, nodeId, serviceId):
             return
 
 def broadcastLoop():
+    nextTime = time.time()+0.2
     while True:
-        #sleep(0.2)
+        sleepLength = nextTime-time.time()
+        if sleepLength > 0:
+            time.sleep(sleepLength)
+        nextTime = time.time()+0.2
 
         if getPSUConnected():
             try:
-                stat = getPSUStatus()
-                liveVoltage = getVoltageReal()
-                liveCurrent = getCurrentReal()
-                voltageSetpoint = getVoltageSetpoint()
-                currentSetpoint = getCurrentSetpoint()
+                #st = time.time()
 
-                zc.broadcast(f"stat:{stat}")
+                # This method is ~0.36s
+                # state = getPSUStatus()
+                # liveVoltage = getVoltageReal()
+                # liveCurrent = getCurrentReal()
+                # voltageSetpoint = getVoltageSetpoint()
+                # currentSetpoint = getCurrentSetpoint()
+
+                # This one's ~0.17s
+                (state, liveVoltage, liveCurrent, voltageSetpoint, currentSetpoint) = getPSUData()
+                #print(f"time {time.time() - st}")
+
+                zc.broadcast(f"stat:{state}")
                 zc.broadcast(f"liveVoltage:{liveVoltage}")
                 zc.broadcast(f"liveCurrent:{liveCurrent}")
                 zc.broadcast(f"voltageSetpoint:{voltageSetpoint}")

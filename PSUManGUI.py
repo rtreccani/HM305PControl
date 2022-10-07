@@ -70,11 +70,7 @@ currentBox.addWidget(liveCurrentReadout)
 #end -----------------------------------------------------------------
 
 def updateAllReadings():
-    stat = getPSUStatus()
-    liveVoltage = getVoltageReal()
-    liveCurrent = getCurrentReal()
-    voltageSetpoint = getVoltageSetpoint()
-    currentSetpoint = getCurrentSetpoint()
+    (stat, liveVoltage, liveCurrent, voltageSetpoint, currentSetpoint) = getPSUData()
 
     if(not voltageInput.hasFocus()):
         voltageInput.setText(str(voltageSetpoint))
