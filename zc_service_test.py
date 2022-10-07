@@ -14,10 +14,10 @@ def rxMSock(sock, nodeId, serviceId):
     while True:
         msg = sock.recvMsg()
         print(f"got message from {nodeId}: {msg}")
-        if msg == b"[power=true]":
+        if msg == b"power=true":
             print("power on")
             setPSUStatus(True)
-        elif msg == b"[power=false]":
+        elif msg == b"power=false":
             print("power off")
             setPSUStatus(False)
         elif msg == None:
