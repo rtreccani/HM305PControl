@@ -55,7 +55,7 @@ def broadcastLoop():
                 (state, liveVoltage, liveCurrent, voltageSetpoint, currentSetpoint) = getPSUData()
                 #print(f"time {time.time() - st}")
 
-                zc.broadcast(f"stat:{state}")
+                zc.broadcast(f"state:{state}")
                 zc.broadcast(f"liveVoltage:{liveVoltage}")
                 zc.broadcast(f"liveCurrent:{liveCurrent}")
                 zc.broadcast(f"voltageSetpoint:{voltageSetpoint}")
