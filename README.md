@@ -22,4 +22,6 @@ Currently the UI looks like this
 I'd love to make it more visually appealing, but my QT knowledge is minimal. I'm working on adding a graph of voltage and current.
 Watch this space if you have this PSU
 
-Note: I found further related information at http://nightflyerfireworks.com/home/fun-with-cheap-programable-power-supplies
+Note: I found further related information at:
+http://nightflyerfireworks.com/home/fun-with-cheap-programable-power-supplies
+https://www.eevblog.com/forum/testgear/power-supply-ripe-for-the-picking/

@@ -1,3 +1,8 @@
+"""
+Run this file to start a server to permit remote control of the PSU over ZeroConnect,
+like with https://github.com/Erhannis/HM305PRemote or the simple zc_client_test.py script.
+"""
+
 import threading
 
 from zeroconnect import ZeroConnect, Ad
@@ -5,6 +10,8 @@ from PSUMan import *
 import time
 
 SERVICE_ID = "0f50032d-cc47-407c-9f1a-a3a28a680c1e"
+#SERVICE_ID = "0f50032d-cc47"
+#SERVICE_ID = "PSUTEST"
 
 zc = ZeroConnect("HM305P") #TODO Name?
 
@@ -55,6 +62,9 @@ def broadcastLoop():
                 zc.broadcast(f"currentSetpoint:{currentSetpoint}")
             except Exception as e:
                 print(f"error broadcasting state: {e}")
+        else:
+            #TODO Try reconnect?
+            pass
 
 threading.Thread(target=broadcastLoop, args=(), daemon=True).start()
 
