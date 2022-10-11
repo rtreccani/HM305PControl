@@ -13,9 +13,12 @@ REG_PGETH = 18
 REG_PGETL = 19
 REG_VSET = 48
 REG_ISET = 49
-REG_VPROTECT = 36
-REG_IPROTECT = 37
-REG_PPROTECT = 38
+REG_VPROTECT_GET = 32
+REG_IPROTECT_GET = 33
+REG_PPROTECT_GET = 34
+REG_VPROTECT_SET = 36 # Doesn't work??  Just use _GET
+REG_IPROTECT_SET = 37 # Haven't tried, but _GET works
+REG_PPROTECT_SET = 38 # Haven't tried either way, but given the other two....
 REG_VIRTUALBUSID = 39321 #why 
 
 class flags:
@@ -74,15 +77,20 @@ def getVoltageSetpoint():
     return(float(stat.registers[0]/100))
 
 def setVoltageOverProtect(v):
-    assert(v >= 0.0 and v <= 32.0), 'voltage overprotect value not in range'
+    assert(v >= 0.0 and v <= 33.0), 'voltage overprotect value not in range'
     v = int(v*100.0)
-    stat = client.write_register(REG_VPROTECT, v, unit=UNIT)
-    assert(not stat.isError()), 'unable to set voltage over-protect'
+    stat = client.write_register(REG_VPROTECT_GET, v, unit=UNIT)
+    assert(not stat.isError()), 'unable to set voltage overprotect'
+
+def getVoltageOverProtect():
+    stat = client.read_holding_registers(REG_VPROTECT_GET, 1, unit=UNIT)
+    assert(not stat.isError()), 'unable to get voltage overprotect'
+    return(float(stat.registers[0]/100))
 
 
 
 def setCurrentSetpoint(i):
-    assert(i>=0.0 and i <= 5.0),'current out of range'
+    assert(i>=0.0 and i <= 10.10),'current out of range'
     i = int(i*1000.0)
     stat = client.write_register(REG_ISET, i, unit=UNIT)
     assert(not stat.isError()), 'unable to set current setpoint'
@@ -95,6 +103,17 @@ def getCurrentReal():
 def getCurrentSetpoint():
     stat = client.read_holding_registers(REG_ISET, 1, unit=UNIT)
     assert(not stat.isError()), 'unable to get current setpoint'
+    return(float(stat.registers[0]/1000))
+
+def setCurrentOverProtect(i):
+    assert(i >= 0.0 and i <= 10.5), 'current overprotect value not in range'
+    i = int(i*1000.0)
+    stat = client.write_register(REG_IPROTECT_GET, i, unit=UNIT)
+    assert(not stat.isError()), 'unable to set current overprotect'
+
+def getCurrentOverProtect():
+    stat = client.read_holding_registers(REG_IPROTECT_GET, 1, unit=UNIT)
+    assert(not stat.isError()), 'unable to get current overprotect'
     return(float(stat.registers[0]/1000))
 
 
@@ -128,11 +147,13 @@ def getPSUData():
     assert(not stat.isError()), 'unable to get PSU status'
     stat = stat.registers
     state = stat[REG_ONOFF]
-    liveVoltage = stat[REG_VGET]
-    liveCurrent = stat[REG_IGET]
-    voltageSetpoint = stat[REG_VSET]
-    currentSetpoint = stat[REG_ISET]
-    return (state, liveVoltage, liveCurrent, voltageSetpoint, currentSetpoint)
+    liveVoltage = stat[REG_VGET] / 100
+    liveCurrent = stat[REG_IGET] / 1000
+    voltageSetpoint = stat[REG_VSET] / 100
+    currentSetpoint = stat[REG_ISET] / 1000
+    voltageOverprotect = stat[REG_VPROTECT_GET] / 100
+    currentOverprotect = stat[REG_IPROTECT_GET] / 1000
+    return (state, liveVoltage, liveCurrent, voltageSetpoint, currentSetpoint, voltageOverprotect, currentOverprotect)
     
 
 

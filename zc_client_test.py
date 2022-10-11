@@ -22,6 +22,6 @@ sock.sendMsg("power=true")
 sleep(1)
 sock.sendMsg("power=false")
 
-sleep(10)
+sleep(10000)
 
 zc.close()
