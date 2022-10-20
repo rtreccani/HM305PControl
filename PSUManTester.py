@@ -9,22 +9,27 @@ def ctrlc_handler(sig, frame):
     sys.exit(0)
 
 
-PSUConnect()
+PSUAutoconnect()
 
 
 togglePSU()
 
 
 v = float(input('what voltage? : '))
-setVoltage(v)
+setVoltageSetpoint(v)
 time.sleep(0.2)
-print(getVoltage())
+print('voltage: ' + str(getVoltageReal()))
+setVoltageOverProtect(10)
 
 
 i = float(input('what current? : '))
-setCurrent(i)
+setCurrentSetpoint(i)
 time.sleep(0.2)
-print(getCurrent())
+print('current: ' + str(getCurrentReal()))
+
+time.sleep(2)
+
+print('power: ' + str(getPowerReal()))
 
 
 togglePSU()
